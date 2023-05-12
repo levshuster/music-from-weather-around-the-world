@@ -1,55 +1,59 @@
 <html>
 	<head>
-		<title>Event Click LatLng</title>
+		<title>Music from Weather Around the World</title>
 		<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-
 		<link rel="stylesheet" type="text/css" href="./style.css" />
+		<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
 		<script type="module" src="./index.js"></script>
+		<style>
+			body {
+				font-family: 'Roboto', sans-serif;
+				margin: 0;
+				padding: 0;
+			}
+
+			.container {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				margin-top: 20px;
+			}
+
+			.input-box {
+				margin-bottom: 10px;
+			}
+
+			#map {
+				height: 500px;
+				width: 100%;
+				margin-top: 20px;
+			}
+		</style>
 	</head>
 	<body>
-		<input type="text" id="ip-input" placeholder="Enter IP Address">
-		<input type="text" id="tempo-input" placeholder="Enter BPM">
-		<div id="map"></div>
+		<div class="container">
+			<h1>Music from Weather Around the World</h1>
+			<div class="input-box">
+				<input type="text" id="ip-input" placeholder="Enter IP Address">
+			</div>
+			<div class="input-box">
+				<input type="text" id="tempo-input" placeholder="Enter BPM">
+			</div>
+			<div id="map"></div>
+			<p>
+				<strong>Sending</strong>
+				Date: <span id="time"></span> - 
+				Temperature: <span id="temperature"></span> - 
+				Rainfall: <span id="rain"></span> - 
+				Snowfall: <span id="snowfall"></span> - 
+				Windspeed 10m Max: <span id="windspeed"></span>
+			</p>
+			  
 		<script
 			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&v=weekly"
 			defer
 		></script>
-		<script>
-			function initMap() {
-				const myLatlng = { lat: -25.363, lng: 131.044 };
-				const map = new google.maps.Map(document.getElementById("map"), {
-				zoom: 4,
-				center: myLatlng,
-				});
-				// Create the initial InfoWindow.
-				let infoWindow = new google.maps.InfoWindow({
-				content: "Click the map to get Lat/Lng!",
-				position: myLatlng,
-				});
-
-				infoWindow.open(map);
-				// Configure the click listener.
-				map.addListener("click", (mapsMouseEvent) => {
-				// Close the current InfoWindow.
-				infoWindow.close();
-				// Create a new InfoWindow.
-				infoWindow = new google.maps.InfoWindow({
-					position: mapsMouseEvent.latLng,
-				});
-				infoWindow.setContent(
-					JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
-				);
-				
-				console.log(mapsMouseEvent.latLng.toJSON().lat);
-				console.log(mapsMouseEvent.latLng.toJSON().lng);
-				const ipAddress = document.getElementById("ip-input").value;
-				console.log(ipAddress);
-				const tempo = document.getElementById("tempo-input").value;
-				console.log(tempo);
-				infoWindow.open(map);
-				});
-			}
-			window.initMap = initMap;	
-		</script>
+		<script src="index.js"></script>
 	</body>
 </html>
