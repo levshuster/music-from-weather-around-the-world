@@ -1,64 +1,55 @@
 <html>
-  <head>
-    <title>Event Click LatLng</title>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+	<head>
+		<title>Event Click LatLng</title>
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 
-    <link rel="stylesheet" type="text/css" href="./style.css" />
-    <script type="module" src="./index.js"></script>
-  </head>
-  <body>
-    <input type="text" id="ip-input" placeholder="Enter IP Address">
-    <input type="text" id="tempo-input" placeholder="Enter BPM">
-    <div id="map"></div>
+		<link rel="stylesheet" type="text/css" href="./style.css" />
+		<script type="module" src="./index.js"></script>
+	</head>
+	<body>
+		<input type="text" id="ip-input" placeholder="Enter IP Address">
+		<input type="text" id="tempo-input" placeholder="Enter BPM">
+		<div id="map"></div>
+		<script
+			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&v=weekly"
+			defer
+		></script>
+		<script>
+			function initMap() {
+				const myLatlng = { lat: -25.363, lng: 131.044 };
+				const map = new google.maps.Map(document.getElementById("map"), {
+				zoom: 4,
+				center: myLatlng,
+				});
+				// Create the initial InfoWindow.
+				let infoWindow = new google.maps.InfoWindow({
+				content: "Click the map to get Lat/Lng!",
+				position: myLatlng,
+				});
 
-    <!-- 
-      The `defer` attribute causes the callback to execute after the full HTML
-      document has been parsed. For non-blocking uses, avoiding race conditions,
-      and consistent behavior across browsers, consider loading using Promises.
-      See https://developers.google.com/maps/documentation/javascript/load-maps-js-api
-      for more information.
-      -->
-    <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD3tYN-oLNc5peawcXnVofp_yHxjj5yEkU&callback=initMap&v=weekly"
-      defer
-    ></script>
-
-    <script>
-      function initMap() {
-        const myLatlng = { lat: -25.363, lng: 131.044 };
-        const map = new google.maps.Map(document.getElementById("map"), {
-          zoom: 4,
-          center: myLatlng,
-        });
-        // Create the initial InfoWindow.
-        let infoWindow = new google.maps.InfoWindow({
-          content: "Click the map to get Lat/Lng!",
-          position: myLatlng,
-        });
-
-        infoWindow.open(map);
-        // Configure the click listener.
-        map.addListener("click", (mapsMouseEvent) => {
-          // Close the current InfoWindow.
-          infoWindow.close();
-          // Create a new InfoWindow.
-          infoWindow = new google.maps.InfoWindow({
-            position: mapsMouseEvent.latLng,
-          });
-          infoWindow.setContent(
-            JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
-          );
-          console.log(mapsMouseEvent.latLng.toJSON().lat);
-          console.log(mapsMouseEvent.latLng.toJSON().lng);
-          const ipAddress = document.getElementById("ip-input").value;
-          console.log(ipAddress);
-          const tempo = document.getElementById("tempo-input").value;
-          console.log(tempo);
-          infoWindow.open(map);
-        });
-      }
-
-      window.initMap = initMap;
-    </script>
-  </body>
+				infoWindow.open(map);
+				// Configure the click listener.
+				map.addListener("click", (mapsMouseEvent) => {
+				// Close the current InfoWindow.
+				infoWindow.close();
+				// Create a new InfoWindow.
+				infoWindow = new google.maps.InfoWindow({
+					position: mapsMouseEvent.latLng,
+				});
+				infoWindow.setContent(
+					JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
+				);
+				
+				console.log(mapsMouseEvent.latLng.toJSON().lat);
+				console.log(mapsMouseEvent.latLng.toJSON().lng);
+				const ipAddress = document.getElementById("ip-input").value;
+				console.log(ipAddress);
+				const tempo = document.getElementById("tempo-input").value;
+				console.log(tempo);
+				infoWindow.open(map);
+				});
+			}
+			window.initMap = initMap;	
+		</script>
+	</body>
 </html>
