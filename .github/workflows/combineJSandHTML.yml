@@ -28,7 +28,7 @@ jobs:
       - name: Replace index.js in index.html
         run: |
           # Read the contents of index.html file
-          HTML_CONTENT="$(cat index.html)"
+          HTML_CONTENT="cat index.html"
 
           # Parse the HTML content using cheerio
           $ = cheerio.load("$HTML_CONTENT")
