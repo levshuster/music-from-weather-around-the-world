@@ -1,0 +1,47 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Replace index.js in index.html
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  replace-index-js:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Node.js and NPM
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+
+      - name: Install cheerio
+        run: npm install cheerio
+
+      - name: Replace index.js in index.html
+        run: |
+          # Read the contents of index.html file
+          HTML_CONTENT=$(cat index.html)
+
+          # Parse the HTML content using cheerio
+          $ = cheerio.load("$HTML_CONTENT")
+
+          # Find the script tag with src="./index.js" and replace its contents with the contents of index.js file
+          INDEX_JS_CONTENT=$(cat index.js)
+          $('script[src="./index.js"]').html("$INDEX_JS_CONTENT")
+
+          # Write the modified HTML content to build.html file
+          echo "$($)" > build.html
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: built-website
+          path: built.html
