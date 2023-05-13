@@ -27,17 +27,11 @@ jobs:
           # Write the modified HTML content to build.html file
           echo "wow" > build.html
 
-      - name: Upload artifact
+      - name: Extract build.html from artifact
+        run: unzip -j built-website.zip build.html -d .
+
+      - name: Upload build.html as artifact
         uses: actions/upload-artifact@v2
         with:
-          name: built-website
+          name: built-website.html
           path: build.html
-
-      - name: Download artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: built-website
-          path: artifacts
-
-      - name: List artifacts
-        run: ls -R artifacts
