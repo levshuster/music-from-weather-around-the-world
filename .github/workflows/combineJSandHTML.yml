@@ -27,11 +27,8 @@ jobs:
 
       - name: Replace index.js in index.html
         run: |
-          # Read the contents of index.html file
-          HTML_CONTENT="cat index.html"
-
           # Parse the HTML content using cheerio
-          $ = cheerio.load("$HTML_CONTENT")
+          $ = cheerio.load('<html><body><h1>Hello, world!</h1></body></html>');
 
           # Find the script tag with src="./index.js" and replace its contents with the contents of index.js file
           INDEX_JS_CONTENT="$(cat index.js)"
