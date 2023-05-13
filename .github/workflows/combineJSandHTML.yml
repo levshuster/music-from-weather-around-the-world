@@ -28,14 +28,10 @@ jobs:
       - name: Replace index.js in index.html
         run: |
           # Parse the HTML content using cheerio
-          $ = cheerio.load('<html><body><h1>Hello, world!</h1></body></html>');
-
-          # Find the script tag with src="./index.js" and replace its contents with the contents of index.js file
-          INDEX_JS_CONTENT="$(cat index.js)"
-          $('script[src="./index.js"]').html("$INDEX_JS_CONTENT")
-
+          $ = cheerio.load('<html><body><h1>Hello, world!</h1></body></html>')
+          
           # Write the modified HTML content to build.html file
-          echo "$($)" > build.html
+          echo "wow" > build.html
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
