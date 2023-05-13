@@ -27,9 +27,6 @@ jobs:
 
       - name: Replace index.js in index.html
         run: |
-          # Parse the HTML content using cheerio
-          $ = cheerio.load('<html><body><h1>Hello, world!</h1></body></html>')
-          
           # Write the modified HTML content to build.html file
           echo "wow" > build.html
 
