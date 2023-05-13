@@ -28,13 +28,13 @@ jobs:
       - name: Replace index.js in index.html
         run: |
           # Read the contents of index.html file
-          HTML_CONTENT=`cat index.html`
+          HTML_CONTENT="$(cat index.html)"
 
           # Parse the HTML content using cheerio
           $ = cheerio.load("$HTML_CONTENT")
 
           # Find the script tag with src="./index.js" and replace its contents with the contents of index.js file
-          INDEX_JS_CONTENT=$(cat index.js)
+          INDEX_JS_CONTENT="$(cat index.js)"
           $('script[src="./index.js"]').html("$INDEX_JS_CONTENT")
 
           # Write the modified HTML content to build.html file
