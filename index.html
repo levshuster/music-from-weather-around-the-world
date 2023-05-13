@@ -35,20 +35,18 @@
 		<div class="container">
 			<h1>Music from Weather Around the World</h1>
 			<div class="input-box">
-				<input type="text" id="ip-input" placeholder="Enter IP Address">
-			</div>
-			<div class="input-box">
-				<p>BPM (updates on each new location): <input type="text" id="tempo-input" value="60"></p>
-				<!-- <input type="text" id="tempo-input" default="60"> -->
+				<p>Port: <input type="text" id="port-input" value="9000"> IP: <input type="text" id="ip-input"></p>
+				<p>Date: <input type="date" id="start-date-picker" value="2022-12-14"> through <input type="date" id="end-date-picker" value="2023-04-27"></p>
+				<p>BPM: <input type="range" id="tempo-input" min="20" max="200" value="60"> <span id="tempo-value">60</span></p>
 			</div>
 			<div id="map"></div>
 			<p>
 				<strong>Sending</strong>
-				Date: <span id="time"></span> - 
-				Temperature: <span id="temperature"></span> - 
-				Rainfall: <span id="rain"></span> - 
-				Snowfall: <span id="snowfall"></span> - 
-				Windspeed 10m Max: <span id="windspeed"></span>
+				Date: <span id="time">0000-00-00</span> - 
+				Temperature: <span id="temperature">0</span> - 
+				Rainfall: <span id="rain">0</span> - 
+				Snowfall: <span id="snowfall">0</span> - 
+				Max Windspeed: <span id="windspeed">0</span>
 			</p>
 			  
 		<script
