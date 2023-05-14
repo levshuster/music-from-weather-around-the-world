@@ -1,0 +1,40 @@
+<html>
+	<head>
+		<title>Music from Weather Around the World</title>
+		<script src='https://polyfill.io/v3/polyfill.min.js?features=default'></script>
+		<link rel='stylesheet' type='text/css' href='./style.css' />
+	</head>
+	<body>
+		<div class='container'>
+			<h1>Music from Weather Around the World</h1>
+			<div class='input-box'>
+				<p>Port: <input type='text' id='port-input' value='9000'> IP: <input type='text' id='ip-input'></p>
+				<p>Date: <input type='date' id='start-date-picker' value='2022-12-14'> through <input type='date' id='end-date-picker' value='2023-04-27'></p>
+				<p>BPM: <input type='range' id='tempo-input' min='20' max='200' value='60'> <span id='tempo-value'>60</span></p>
+			</div>
+		<script src="https://cdn.jsdelivr.net/npm/osc-js/dist/osc-js-browser.min.js"></script>
+		<script>
+			// const maxApi = require('max-api');
+			// keeps the first async fucntion from continuing once the second async function is created
+			run_number = 0;
+
+			// OSC
+
+			// Create a new OSC client
+			// const client = new osc.WebSocketPort({
+			// 	url: "ws://localhost:8080"
+			// });
+			// // Send an OSC message
+			// client.send({
+			// 	address: "/test",
+			// 	args: [1, "two", 3.0]
+			// });
+
+			var osc = new OSC();
+			osc.open(); // connect by default to ws://localhost:8080
+			var message = new OSC.Message('/test/random', Math.random());
+			osc.send(message);
+			
+		</script>
+	</body>
+</html>
