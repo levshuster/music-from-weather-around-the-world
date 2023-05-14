@@ -6,69 +6,231 @@ const maxApi = require("max-api");
 const hostname = 'localhost';
 const port = 8000;
 
-fs.readFile('./index.html', function (err, html) {
-
-    if (err) throw err;    
-
-    http.createServer(function(request, response) {  
-        response.writeHeader(200, {"Content-Type": "text/html"});  
-        response.write(html);  
-        response.end();  
-    }).listen(port);
-});
-
-
-// const server = http.createServer((req, res) => {
-
-//     res.writeHead(200, {
-//         "Content-type": "text/html"
-//       });
+// fs.readFile('./index.html', function (err, html) {
     
-//     res.write("/index.html");
-//     // console.log('Request for ' + req.url + ' by method ' + req.method);
+//     sendUpdate();
 
-//     // if (req.method == 'GET') {
-//     //     var fileUrl;
-//     //     if (req.url == '/') fileUrl = '/index.html';
-//     //     else fileUrl = req.url;
+//     if (err) throw err;    
 
-//     //     var filePath = path.resolve('./public' + fileUrl);
-//     //     const fileExt = path.extname(filePath);
-//     //     if (fileExt == '.html') {
-//     //         fs.exists(filePath, (exists) => {
-//     //             if (!exists) {
-//     //                 filePath = path.resolve('./public/404.html');
-//     //                 res.statusCode = 404;
-//     //                 res.setHeader('Content-Type', 'text/html');
-//     //                 fs.createReadStream(filePath).pipe(res);
-//     //                 return;
-//     //             }
-//     //             res.statusCode = 200;
-//     //             res.setHeader('Content-Type', 'text/html');
-//     //             fs.createReadStream(filePath).pipe(res);
-//     //         });
-//     //     }
-//     //     else if (fileExt == '.css') {
-//     //         res.statusCode = 200;
-//     //         res.setHeader('Content-Type', 'text/css');
-//     //         fs.createReadStream(filePath).pipe(res);
-//     //     }
-//     //     else {
-//     //         filePath = path.resolve('./public/404.html');
-//     //         res.statusCode = 404;
-//     //         res.setHeader('Content-Type', 'text/html');
-//     //         fs.createReadStream(filePath).pipe(res);
-//     //     }
-//     // }
-//     // else {
-//     //     filePath = path.resolve('./public/404.html');
-//     //     res.statusCode = 404;
-//     //     res.setHeader('Content-Type', 'text/html');
-//     //     fs.createReadStream(filePath).pipe(res);
-//     // }
-// }).listen(8000, "127.0.0.1");
+//     http.createServer(function(request, response) {  
+//         response.writeHeader(200, {"Content-Type": "text/html"});  
+//         response.write(html);  
+//         response.end();  
+//     }).listen(port);
+// });
+
+const html = `<html>
+<head>
+    <title>Music from Weather Around the World</title>
+    <script src='https://polyfill.io/v3/polyfill.min.js?features=default'></script>
+    <link rel='stylesheet' type='text/css' href='./style.css' />
+    <link href='https://fonts.googleapis.com/css?family=Roboto&display=swap' rel='stylesheet'>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .input-box {
+            margin-bottom: 10px;
+        }
+
+        #map {
+            height: 500px;
+            width: 100%;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <h1>Music from Weather Around the World</h1>
+        <div class='input-box'>
+            <p>Port: <input type='text' id='port-input' value='9000'> IP: <input type='text' id='ip-input'></p>
+            <p>Date: <input type='date' id='start-date-picker' value='2022-12-14'> through <input type='date' id='end-date-picker' value='2023-04-27'></p>
+            <p>BPM: <input type='range' id='tempo-input' min='20' max='200' value='60'> <span id='tempo-value'>60</span></p>
+        </div>
+        <div id='map'></div>
+        <p>
+            <strong>Sending</strong>
+            Date: <span id='time'>0000-00-00</span> - 
+            Temperature: <span id='temperature'>0</span> - 
+            Rainfall: <span id='rain'>0</span> - 
+            Snowfall: <span id='snowfall'>0</span> - 
+            Max Windspeed: <span id='windspeed'>0</span>
+        </p>
+          
+    <script
+        src='https://maps.googleapis.com/maps/api/js?key=AIzaSyD3tYN-oLNc5peawcXnVofp_yHxjj5yEkU&callback=initMap&v=weekly'
+        defer
+    ></script>
+    <script>
+        // const maxApi = require('max-api');
+        // keeps the first async fucntion from continuing once the second async function is created
+        run_number = 0;
+
+        // OSC
+
+        async function sendOSC(weatherData, ip, port, callNumber) {
+            console.log(weatherData);
+            const numberOfDays = weatherData.rain_sum.length;
+            // const startingTime = Date.now();
+            // const millisecondsPerBeat = 60000 / document.getElementById('tempo-input').value;
+            for (var i = 0; i < numberOfDays; i++) {
+                if (callNumber != run_number) break;
+                rainSum = weatherData.rain_sum[i];
+                snowfallSum = weatherData.snowfall_sum[i];
+                temperature2mMean = weatherData.temperature_2m_mean[i];
+                time = weatherData.time[i];
+                windspeed10mMax = weatherData.windspeed_10m_max[i];
+                
+                if (time == '2023-05-05') {
+                    alert('This project is based on historical data, please select an earlier date.');
+                    break;
+                }
+
+                //sendUpdate()
+                
+                // maxApi.outlet(rainSum, snowfallSum, temperature2mMean, time, windspeed10mMax)
+
+                document.getElementById('time').textContent = time;
+                document.getElementById('temperature').textContent = temperature2mMean;
+                document.getElementById('rain').textContent = rainSum;
+                document.getElementById('snowfall').textContent = snowfallSum;
+                document.getElementById('windspeed').textContent = windspeed10mMax;
+                await sleepForABeat();
+                // console.log(new Date().toISOString().slice(14, -5));
+                // sleepUntil(startingTime + millisecondsPerBeat * (i+1)); // TODO: check to see if i or i+1 is correct
+            }
+        }
+
+        // WEATHER
+
+        async function getWeatherData(lat, lng) {
+            // const start_date = '2022-12-04';
+            const start_date = document.getElementById('start-date-picker').value
+            // const end_date = '2023-04-27';
+            const end_date = document.getElementById('end-date-picker').value
+            const daily = 'temperature_2m_mean,rain_sum,snowfall_sum,windspeed_10m_max';
+            const timezone = 'America/New_York';
+            const url = 'https://archive-api.open-meteo.com/v1/archive?latitude=\${lat}&longitude=\${lng}&start_date=\${start_date}&end_date=\${end_date}&daily=\${daily}&timezone=\${timezone}';
+            const response = await fetch(url);
+            const data = await response.json();
+            
+            run_number += 1;
+            return data;
+        }
+
+        // MAP
+
+        async function initMap() {
+            document.getElementById('ip-input').value = await getIPFromIpify();
+            
+            const myLatlng = { lat: 44.45677677613184, lng: -93.15629227226407};
+            const map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 4,
+                center: myLatlng,
+            });
+            let infoWindow = new google.maps.InfoWindow({
+                content: 'Click the map to get Lat/Lng!',
+                position: myLatlng,
+            });
+            infoWindow.open(map);
+            
+            map.addListener('click', async (mapsMouseEvent) => {
+                infoWindow.close();
+                infoWindow = new google.maps.InfoWindow({
+                    position: mapsMouseEvent.latLng,
+                });
+
+                lat = mapsMouseEvent.latLng.toJSON().lat;
+                lng = mapsMouseEvent.latLng.toJSON().lng;
+                infoWindow.setContent(
+                    '(\${lat.toFixed(2)}, \${lng.toFixed(2)})'
+                );
+                
+                const weatherData = await getWeatherData(
+                    lat,lng
+                );
+                await sendOSC(
+                    weatherData.daily,
+                    document.getElementById('ip-input').value,
+                    document.getElementById('port-input').value,
+                    run_number
+                );
+                infoWindow.open(map);
+            });
+        }
+
+        // HELPERS
+
+        function sleepForABeat() {
+            const millisecondsPerBeat = 60000 / document.getElementById('tempo-input').value; // Calculate the duration of one beat
+            // console.log(new Date().toISOString().slice(14, -5));
+            return new Promise(resolve => setTimeout(resolve, millisecondsPerBeat)); // Use setTimeout() to pause for one beat
+        }
+
+        function sleepUntil(timestamp) {
+            const timeToSleep = timestamp - Date.now();
+            if (timeToSleep <= 0) {
+            return;
+            }
+            const timer = setTimeout(() => {}, timeToSleep);
+            while (Date.now() < timestamp) {}
+            clearTimeout(timer);
+        }
+
+        function getIPFromIpify() {
+            return new Promise((resolve, reject) => {
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => resolve(data.ip))
+                .catch(error => reject(error))
+            });
+        }
+
+        const tempoInput = document.getElementById('tempo-input');
+        const tempoValue = document.getElementById('tempo-value');
+
+        function updateTempoValue() {
+            const currentTempo = tempoInput.value;
+            tempoValue.textContent = currentTempo;
+        }
+
+        tempoInput.addEventListener('input', updateTempoValue);
+        tempoValue.addEventListener('input', () => {
+            const currentTempo = tempoValue.textContent;
+            tempoInput.value = currentTempo;
+        });
 
 
-// // server.listen(port, hostname, () => {
-// //     console.log(`Server running at http://${hostname}:${port}/`);
-// // });
+        // MAIN
+
+        window.initMap = initMap;
+        updateTempoValue();
+
+    </script>
+</body>
+</html>`
+
+http.createServer(function(request, response) {  
+    sendUpdate();
+    response.writeHeader(200, {"Content-Type": "text/html"});  
+    response.write(html);  
+    response.end();  
+}).listen(port);
+
+async function sendUpdate() {
+    maxApi.outlet("hello-world");
+}
+
+
