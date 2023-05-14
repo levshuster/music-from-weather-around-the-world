@@ -12,28 +12,35 @@
 				<p>Date: <input type='date' id='start-date-picker' value='2022-12-14'> through <input type='date' id='end-date-picker' value='2023-04-27'></p>
 				<p>BPM: <input type='range' id='tempo-input' min='20' max='200' value='60'> <span id='tempo-value'>60</span></p>
 			</div>
-		<script src="node_modules/osc-js/lib/osc.min.js"></script>
+            <script src="node_modules/osc-js/lib/osc.min.js"></script>
+
 		<script>
-			// const maxApi = require('max-api');
-			// keeps the first async fucntion from continuing once the second async function is created
-			run_number = 0;
+            var osc = new OSC();
+            osc.open(); // connect by default to ws://localhost:8080
 
-			// OSC
+            var message = new OSC.Message('/test/random', Math.random());
+            osc.send(message);
+            // var OscEmitter = require('osc-emitter')
+            // emitter = new OscEmitter();
 
-			// Create a new OSC client
-			// const client = new osc.WebSocketPort({
-			// 	url: "ws://localhost:8080"
-			// });
-			// // Send an OSC message
-			// client.send({
-			// 	address: "/test",
-			// 	args: [1, "two", 3.0]
-			// });
-			var osc = new OSC();
-			osc.open(); // connect by default to ws://localhost:8080
-			var message = new OSC.Message('/test/random', Math.random());
-			osc.send(message);
-			
+            // emitter.add('localhost', 7400);
+
+            // emitter.emit('/foo', 1, 2, 3);
+            // const osc = new OSC({ plugin: new OSC.DatagramPlugin() })
+            // osc.open() // bind udp socket to port 41234
+			// const osc = new OSC({
+            //     discardLateMessages: false, /* ignores messages which timetags lie in the past */
+            //     plugin: new OSC.WebsocketClientPlugin({
+            //         host: '137.22.3.223',    // @param {string} Hostname of WebSocket server
+            //         port: 8080            // @param {number} Port of WebSocket server
+            //     }) /* used plugin for network communication */ 
+            // });
+
+            // const osc = new OSC({
+            //     plugin: new OSC.DatagramPlugin({ send: { port: 9000, host: '137.22.3.223' } })
+            // });
+
+            // osc.open();
 		</script>
 	</body>
 </html>
