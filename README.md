@@ -1,6 +1,58 @@
 # music-from-weather-around-the-world
 
-https://developers.google.com/maps/documentation/javascript/examples/event-click-latlng#maps_event_click_latlng-typescript
-https://open-meteo.com/en/docs/historical-weather-api#latitude=52.5269&longitude=13.41&start_date=2022-12-04&end_date=2023-04-27&daily=temperature_2m_mean,rain_sum,snowfall_sum,windspeed_10m_max&timezone=America%2FNew_York
-https://github.com/colinbdclark/osc.js/ or https://www.npmjs.com/package/osc-js or https://docs.cycling74.com/max8/vignettes/04_n4m_jsdifferences
-MAX Patch
+## Description
+
+TODO: add description
+## Stack
+
+- Python flask backend serves web dashboard
+
+- Web dashboard calls Google Maps API to allow users to easily pick locations and explore street view
+
+- Web dashboard calls OpenWeather API to fetch historical weather data
+
+- Web dashboard pipes weather data into the python backend
+
+- Python concurantly parses weather data and sends all the weather measures pertaining to each day on each beat via OSC protocol
+
+- MAX Patch listens for OSC messages and generates music to represent the weather
+
+## Installation
+
+1. Clone repo or dowload zip file
+
+```bash
+git clone https://github.com/levshuster/music-from-weather-around-the-world.git
+```
+
+2. Start the server
+
+navigate to the directory and run the following commands
+
+```bash
+pip install -r requirements.txt
+python3 index.py localhost 5000
+```
+
+3. Open the web dashboard by going to http://localhost:5000 in a web browser.
+
+(If you wish, update the tempo, start date, and end date)
+
+4. Open the MAX patch
+
+5. Click on the map to fetch historical weather data and pipe it into our autmosphere generator.
+
+- Explore contrasting climate regions
+
+- Both listen and explore a locaiton with street view
+
+- Try different times of years or similar times across different years
+
+
+## Code Exerpts From
+
+- Google Maps Api Documentation
+
+- ChatGPT/Git-Copilot 
+
+- Carleton College CS251 starter code written by Jeff Ondich
