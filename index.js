@@ -1,5 +1,10 @@
+const maxApi = require("max-api");
 // keeps the first async fucntion from continuing once the second async function is created
 run_number = 0;
+
+
+
+
 
 // OSC
 
@@ -21,6 +26,8 @@ async function sendOSC(weatherData, ip, port, callNumber) {
 			break;
 		}
 		
+		maxApi.outlet(rainSum, snowfallSum, temperature2mMean, time, windspeed10mMax)
+
 		document.getElementById("time").textContent = time;
 		document.getElementById("temperature").textContent = temperature2mMean;
 		document.getElementById("rain").textContent = rainSum;
