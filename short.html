@@ -29,7 +29,7 @@
 			// 	address: "/test",
 			// 	args: [1, "two", 3.0]
 			// });
-
+            const OSC = require('osc-js')
 			var osc = new OSC();
 			osc.open(); // connect by default to ws://localhost:8080
 			var message = new OSC.Message('/test/random', Math.random());
