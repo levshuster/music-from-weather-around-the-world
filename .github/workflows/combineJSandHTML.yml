@@ -1,0 +1,37 @@
+name: Replace index.js in index.html
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  replace-index-js:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Node.js and NPM
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+
+      - name: Install cheerio
+        run: npm install cheerio
+
+      - name: Replace index.js in index.html
+        run: |
+          # Write the modified HTML content to build.html file
+          echo "wow" > build.html
+
+      - name: Extract build.html from artifact
+        run: unzip -j built-website.zip build.html -d .
+
+      - name: Upload build.html as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: built-website.html
+          path: build.html
