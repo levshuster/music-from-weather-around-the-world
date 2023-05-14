@@ -1,0 +1,7 @@
+{
+    "name": "music-from-weather-around-the-world",
+    "version": "0.0.1",
+    "dependencies": {
+        "osc": "2.4.1"
+    }
+}
