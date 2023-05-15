@@ -36,22 +36,23 @@ python3 index.py localhost 5000
 
 3. Open the web dashboard by going to http://localhost:5000 in a web browser.
 
-(If you wish, update the tempo, start date, and end date)
+  (If you wish, update the tempo, start date, and end date)
 
 4. Open the MAX patch
 
+  - Install CNMAT externals from the Max Package Manager
+  - click on the `port 9000 ` message box to start listening
+
 5. Click on the map to fetch historical weather data and pipe it into our autmosphere generator.
 
-- Explore contrasting climate regions
-
-- Both listen and explore a locaiton with street view
-
-- Try different times of years or similar times across different years
+  - Explore contrasting climate regions
+  - Both listen and visually explore a locaiton with street view
+  - Try different times of years or similar times across different years
 
 
 ## Code Exerpts From
 
-- Google Maps Api Documentation
+- Google Maps API Documentation
 
 - ChatGPT/Git-Copilot 
 
