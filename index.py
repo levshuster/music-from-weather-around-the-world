@@ -10,7 +10,7 @@ from pythonosc import udp_client
 
 app = Flask(__name__)
 ip = "localhost"
-port = 8000
+musicport = 8000
 tempo = 60
 starting = True
 message_count=0
@@ -19,7 +19,7 @@ i = 0
 
 def send_message():
 	global data
-	global port
+	global musicport
 	global tempo
 	global ip
 	global message_count
@@ -38,7 +38,7 @@ def send_message():
 		# print(data["windspeed_10m_max"][i])
 		# print(tempo)
 
-		client = udp_client.SimpleUDPClient(ip, port)
+		client = udp_client.SimpleUDPClient(ip, musicport)
 		client.send_message("/temperature", data["temperature_2m_mean"][i])
 		client.send_message("/rain", data["rain_sum"][i])
 		client.send_message("/snow", data["snowfall_sum"][i])
@@ -61,7 +61,7 @@ def receiveMetaData():
 	global tempo 
 	tempo = int(response['tempo'])
 	print(tempo)
-	global port 
+	global musicport 
 	port = int(response['port'])
 	print(response)
 	return {'ip': ip}, 200
