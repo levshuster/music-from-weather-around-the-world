@@ -30,7 +30,7 @@ git clone https://github.com/levshuster/music-from-weather-around-the-world.git
 navigate to the directory and run the following commands
 
 ```bash
-pip install -r requirements.txt
+python3 -m pip install -r requirements.txt
 python3 index.py localhost 5000
 ```
 
@@ -40,7 +40,7 @@ python3 index.py localhost 5000
 
 4. Open the MAX patch
 
-  - Install CNMAT externals from the Max Package Manager
+  - Install CNMAT externals from the MAX Package Manager then restart MAX
   - click on the `port 9000 ` message box to start listening
 
 5. Click on the map to fetch historical weather data and pipe it into our autmosphere generator.
