@@ -30,7 +30,7 @@ git clone https://github.com/levshuster/music-from-weather-around-the-world.git
 navigate to the directory and run the following commands
 
 ```bash
-pip install -r requirements.txt
+python3 -m pip install -r requirements.txt
 python3 index.py localhost 5000
 ```
 
