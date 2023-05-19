@@ -3,6 +3,7 @@
 ## Description
 
 TODO: add description
+
 ## Stack
 
 - Python flask backend serves web dashboard
@@ -35,17 +36,18 @@ python3 index.py localhost 5000
 ```
 
 3. Open the web dashboard by going to http://localhost:5000 in a web browser.
-
-  (If you wish, update the tempo, start date, and end date)
+  - Ensure the IP address box matches your devices IP. If necacary update value to match
+  - Set tempo, start date, and end date
 
 4. Open the MAX patch
 
   - Install CNMAT externals from the MAX Package Manager then restart MAX
-  - click on the `port 9000 ` message box to start listening
+  - Update the port number if necacary
 
 5. Click on the map to fetch historical weather data and pipe it into our autmosphere generator.
 
   - Explore contrasting climate regions
+  - What for oboe to stop playing before selecting the next location to avoid syncopation
   - Both listen and visually explore a locaiton with street view
   - Try different times of years or similar times across different years
 
@@ -60,4 +62,5 @@ python3 index.py localhost 5000
 
 
 ## Atmospheric Sound From
-- https://www.videvo.net/sound-effect/rain-fall-medium-pe1005201/254265/
+- videvo.net
+- freesfx.co.uk
