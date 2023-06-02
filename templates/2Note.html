@@ -77,12 +77,12 @@
 	<body>
 		<!-- add spacer -->
 		<div style="margin-top: 20px;"></div>
-		<h1>Democratic Music</h1>
+		<h1>&#x1F5F3;&#xFE0F;Democratic Music&#x1F5F3;&#xFE0F;</h1>
 		<hr class="soft-line">
 		<table>
 			<tr>
 				<th>Note 1:</th>
-				<td><button class="play-button">Play</button></td>
+				<td><button id="play-button-1" class="play-button">Play</button></td>
 				<td>
 					<div class="slider-container">
 						<label for="note-length-1" class="slider-label">Note Length:</label>
@@ -96,7 +96,7 @@
 			</tr>
 			<tr>
 				<th>Note 2:</th>
-				<td><button class="play-button">Play</button></td>
+				<td><button id="play-button-2" class="play-button">Play</button></td>
 				<td>
 					<div class="slider-container">
 						<label for="note-length-2" class="slider-label">Note Length:</label>
@@ -120,14 +120,14 @@
 						<p>-BPM is the average of each user's vote</p>
 					</div>
 					<div class="slider-container">
-						<button class="vote-button">Vote For New Harmony</button>
+						<button class="vote-button" id="vote">Vote For New Harmony</button>
 						<p>-When the majority vote for a new harmony, Note 1 and Note 2 will be changed to fit into a new harmony</p>
 					</div>
 				</td>
 			</tr>
 		</table>
-		<hr class="soft-line">
-		<table>
+		<!-- <hr class="soft-line"> -->
+		<!-- <table>
 			<tr>
 				<th>Settings:</th>
 				<td>
@@ -141,6 +141,57 @@
 					</div>
 				</td>
 			</tr>
-		</table>
+		</table> -->
 	</body>
+	
+	<script>
+		var url = window.location.href;
+		// console.log(url); // Output: the current URL
+		
+		function sendApiCall() {
+		// Code to send API call goes here
+		console.log("API call sent at", new Date().toLocaleTimeString());
+		
+		// Schedule the next API call after 20 seconds
+		setTimeout(sendApiCall, 20000);
+		}
+
+		// Call the function initially to start the cycle
+		sendApiCall();
+		
+		// document.addEventListener("DOMContentLoaded", async () => {
+		// 	await startupAPICall();
+		// });
+		
+		// async function startupAPICall() {
+		// 	const ip = getIP();
+		// 	const port = getPort();
+		// 	const url = `http://${ip}:${port}/startup`;
+		// 	const response = await fetch(url);
+		// 	const data = await response.json();
+		// 	console.log(data);
+		// }
+		
+		[document.getElementById("play-button-1"), document.getElementById("play-button-2")]
+			.forEach(function(button, index) {
+				button.addEventListener("click", function() {
+					var noteInput = document.getElementById("note-length-"+(index+1)).value;
+  					var playButton = document.getElementById("panning-"+(index+1)).value;
+				});
+			});
+			
+		document.getElementById("BPM").addEventListener("change", function() {
+			var BPM = document.getElementById("BPM").value;
+			console.log(BPM);
+		});
+		
+		document.getElementById("vote").addEventListener("click", function() {
+			console.log("Vote");
+		});
+		
+		// const getIP = () => document.getElementById("ip-input").value;
+		// const getPort = () => document.getElementById("port-input").value;
+		
+
+	</script>
 </html>
