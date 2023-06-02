@@ -80,7 +80,7 @@ def weatherData():
 
 
 if __name__ == '__main__':
-	parser = argparse.ArgumentParser('A server to connect google maps --> Historical Weather Data --> Max')
+	parser = argparse.ArgumentParser('A server to allow an arbitrary number of people to each control different parts of the same Max instrument')
 	parser.add_argument('host', help='the host on which this application is running')
 	parser.add_argument('port', type=int, help='the port on which this application is listening')
 	arguments = parser.parse_args()
