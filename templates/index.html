@@ -145,15 +145,46 @@
 	</body>
 	
 	<script>
+		var user_number = 0;
+		
+		fetch("/new_player")
+			.then(response => response.text())
+			.then(data => {
+				const result = parseInt(data);
+				if (!isNaN(result)) {
+					user_number = result;
+				} else {
+				console.error("Invalid response:", data);
+				}
+			})
+			.catch(error => {
+				console.error("Error:", error);
+			});
+			
 		var url = window.location.href;
 		// console.log(url); // Output: the current URL
 		
 		function sendApiCall() {
-		// Code to send API call goes here
-		console.log("API call sent at", new Date().toLocaleTimeString());
-		
-		// Schedule the next API call after 20 seconds
-		setTimeout(sendApiCall, 20000);
+			console.log("Player index:", user_number);
+
+			// Code to send API call goes here
+			console.log("API call sent at", new Date().toLocaleTimeString());
+			// Make a POST request to the Flask endpoint "/process_data"
+			fetch("/ping", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({ user_number: user_number }) // Send only the player number
+			})
+			.then(response => {
+			// Handle the response from the server here
+			})
+			.catch(error => {
+			console.error(error);
+			});
+			// Schedule the next API call after 20 seconds
+			setTimeout(sendApiCall, 10000);
 		}
 
 		// Call the function initially to start the cycle
@@ -176,13 +207,53 @@
 			.forEach(function(button, index) {
 				button.addEventListener("click", function() {
 					var noteInput = document.getElementById("note-length-"+(index+1)).value;
-  					var playButton = document.getElementById("panning-"+(index+1)).value;
+  					var panning = document.getElementById("panning-"+(index+1)).value;
+					const data = { 
+						note_length: noteInput,
+						panning_value: panning,
+						user_number: user_number,
+						note_number: index
+					};	
+
+					// Make a POST request to the Flask endpoint "/process_data"
+					fetch("/playNote", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify(data)
+					})
+					.then(response => {
+					// Handle the response from the server here
+					})
+					.catch(error => {
+						console.error(error);
+					});
 				});
 			});
 			
 		document.getElementById("BPM").addEventListener("change", function() {
 			var BPM = document.getElementById("BPM").value;
 			console.log(BPM);
+			const data = { 
+				BPM: BPM,
+				user_number: user_number
+			};	
+
+			// Make a POST request to the Flask endpoint "/process_data"
+			fetch("/BPM", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify(data)
+			})
+			.then(response => {
+			// Handle the response from the server here
+			})
+			.catch(error => {
+				console.error(error);
+			});
 		});
 		
 		document.getElementById("vote").addEventListener("click", function() {

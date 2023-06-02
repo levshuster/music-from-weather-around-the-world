@@ -4,79 +4,146 @@
 		6 November 2020
 '''
 import argparse
+from collections import namedtuple
 from threading import Timer
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, make_response, request, jsonify, render_template
 from pythonosc import udp_client
+from datetime import datetime, timedelta
+from dataclasses import dataclass
+
 
 app = Flask(__name__)
 ip = "localhost"
+TIMEOUT = 30
 musicport = 8000
-tempo = 60
-starting = True
-message_count=0
-current_message = 0
-i = 0
+players = []
+client = udp_client.SimpleUDPClient(ip, musicport)
 
-def send_message():
-	global data
-	global musicport
-	global tempo
-	global ip
-	global message_count
-	global current_message
-	global i
-	if message_count != current_message:
-		current_message +=1
-		i = 0
-	if i != len(data['time']):
+# create a named tuple called player with a checking time, BMP, and note values
+
+@dataclass
+class Player:
+    check_in_time: datetime
+    BPM: int
+    note_values: list
+    vote: int
+
+# def send_message():
+
+# 		client = udp_client.SimpleUDPClient(ip, musicport)
+# 		client.send_message("/temperature", data["temperature_2m_mean"][i])
+# 		client.send_message("/rain", data["rain_sum"][i])
+# 		client.send_message("/snow", data["snowfall_sum"][i])
+# 		client.send_message("/wind", data["windspeed_10m_max"][i])
+# 		client.send_message("/tempo", tempo)
+
+# ---- HELPER FUNCTIONS ----
+
+def send_new_BPM():
+	BPM_sum = 0
+	for player in players:
+		BPM_sum += player.BPM
 		
-		# Code to send the message containing the data variable goes here
-		# print(data["time"][i])
-		# print(data["temperature_2m_mean"][i])
-		# print(data["rain_sum"][i])
-		# print(data["snowfall_sum"][i])
-		# print(data["windspeed_10m_max"][i])
-		# print(tempo)
+	BPM = BPM_sum / len(players)
+	print(BPM)
 
-		client = udp_client.SimpleUDPClient(ip, musicport)
-		client.send_message("/temperature", data["temperature_2m_mean"][i])
-		client.send_message("/rain", data["rain_sum"][i])
-		client.send_message("/snow", data["snowfall_sum"][i])
-		client.send_message("/wind", data["windspeed_10m_max"][i])
-		client.send_message("/tempo", tempo)
+def tally_vote():
+	votes = 0
+	for player in players:
+		votes += player.vote
+	if votes >= len(players) / 2:
+		for player in players:
+			player.vote = 0
+		print("Vote passed")
+	else:
+		print("Vote failed")
 
-		i+=1
-		Timer(60 / tempo, send_message).start()
-
+# --- ROUTES ---
 
 @app.route('/')
 def home():
 	return render_template('index.html')
 
-@app.route('/metaData', methods=["POST"])
-def receiveMetaData():
-	response = request.json
-	global ip 
-	ip = response['ip']
-	global tempo 
-	tempo = int(response['tempo'])
-	print(tempo)
-	global musicport 
-	port = int(response['port'])
-	print(response)
-	return {'ip': ip}, 200
 
-@app.route('/weatherData', methods=['POST'])
-def weatherData():
-	global data 
-	data= request.get_json()
-	print(data)
-	global starting 
-	global message_count
-	message_count += 1
-	if starting:
-		send_message()
+@app.route('/new_player')
+def get_user_number():
+	current_timestamp = datetime.now()
+	for index, player in enumerate(players):
+		print("current time is " + str(current_timestamp))
+		print("player time is " + str(player.check_in_time))
+		if current_timestamp - player.check_in_time > timedelta(seconds=TIMEOUT):
+			player.check_in_time = current_timestamp
+			print("Player " + str(index) + " timed out and was replaced by a new user")
+			return make_response(str(index))
+	
+	index = len(players)
+	notes = [] # TODO: read notes from file
+	players.append(Player(current_timestamp, 0, notes, 0))
+	return make_response(str(index))
+
+@app.route('/vote', methods=["POST"])
+def receiveVote():
+	user_number = int(request.data)
+	
+	players[user_number].vote = 1
+	tally_vote()
 	return jsonify({'success': True})
+
+@app.route('/ping', methods=["POST"])
+def receiveping():
+	response = request.json
+	if response is None:
+		return jsonify({'success': False})
+	
+	user_number = int(response['user_number'])
+	
+	players[user_number].check_in_time = datetime.now()
+	print("Player " + str(user_number) + " pinged")
+	return jsonify({'success': True})
+
+@app.route('/BPM', methods=["POST"])
+def receiveBPM():
+	response = request.json
+	if response is None:
+		return jsonify({'success': False})
+	
+	user_number = int(response['user_number'])
+	BPM = int(response['BPM'])
+	
+	players[user_number].BPM = BPM
+	send_new_BPM()
+
+	return jsonify({'success': True})
+
+@app.route('/playNote', methods=["POST"])
+def receiveNote():
+	response = request.json
+	if response is None:
+		return jsonify({'success': False})
+	
+	user_number = int(response['user_number'])
+	note_length = int(response['note_length'])
+	panning_value = int(response['panning_value'])
+	note_number = int(response['note_number'])
+	
+	print(user_number)
+	print(note_length)
+	print(panning_value)
+	print(note_number)
+	
+	return jsonify({'success': True})
+
+# @app.route('/weatherData', methods=['POST'])
+# def weatherData():
+# 	global data 
+# 	data= request.get_json()
+# 	print(data)
+# 	global starting 
+# 	global message_count
+# 	message_count += 1
+# 	if starting:
+# 		send_message()
+# 	return jsonify({'success': True})
 
 
 if __name__ == '__main__':
