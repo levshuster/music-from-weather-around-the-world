@@ -258,6 +258,19 @@
 		
 		document.getElementById("vote").addEventListener("click", function() {
 			console.log("Vote");
+			fetch("/vote", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({ user_number: user_number }) // Send only the player number
+			})
+			.then(response => {
+			// Handle the response from the server here
+			})
+			.catch(error => {
+			console.error(error);
+			});
 		});
 		
 		// const getIP = () => document.getElementById("ip-input").value;

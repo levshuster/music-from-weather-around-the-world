@@ -11,7 +11,6 @@ from pythonosc import udp_client
 from datetime import datetime, timedelta
 from dataclasses import dataclass
 
-
 app = Flask(__name__)
 ip = "localhost"
 TIMEOUT = 30
@@ -64,7 +63,6 @@ def tally_vote():
 def home():
 	return render_template('index.html')
 
-
 @app.route('/new_player')
 def get_user_number():
 	current_timestamp = datetime.now()
@@ -83,7 +81,11 @@ def get_user_number():
 
 @app.route('/vote', methods=["POST"])
 def receiveVote():
-	user_number = int(request.data)
+	response = request.json
+	if response is None:
+		return jsonify({'success': False})
+		
+	user_number = int(response['user_number'])
 	
 	players[user_number].vote = 1
 	tally_vote()
@@ -132,19 +134,6 @@ def receiveNote():
 	print(note_number)
 	
 	return jsonify({'success': True})
-
-# @app.route('/weatherData', methods=['POST'])
-# def weatherData():
-# 	global data 
-# 	data= request.get_json()
-# 	print(data)
-# 	global starting 
-# 	global message_count
-# 	message_count += 1
-# 	if starting:
-# 		send_message()
-# 	return jsonify({'success': True})
-
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser('A server to allow an arbitrary number of people to each control different parts of the same Max instrument')
