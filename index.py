@@ -114,7 +114,7 @@ def tally_vote():
 		client.send_message("/active_scale", str(active_scale))
 
 		for player in players:
-			player.notes = get_new_notes()
+			player.note_values = get_new_notes()
 	else:
 		print("Vote failed")
 
