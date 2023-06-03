@@ -10,7 +10,7 @@
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 34.0, 87.0, 1751.0, 1234.0 ],
+		"rect" : [ 459.0, 310.0, 1750.0, 764.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -39,6 +39,31 @@
 		"subpatcher_template" : "",
 		"assistshowspatchername" : 0,
 		"boxes" : [ 			{
+				"box" : 				{
+					"id" : "obj-19",
+					"linecount" : 3,
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 950.0, 54.585714221000671, 150.0, 47.0 ],
+					"text" : "todo: update form midi number to midi letter inside of FM_synth..."
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-12",
+					"linecount" : 4,
+					"maxclass" : "message",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 829.0, 116.0, 50.0, 62.0 ],
+					"text" : "/user_count \"50 F2 2 0\""
+				}
+
+			}
+, 			{
 				"box" : 				{
 					"id" : "obj-64",
 					"maxclass" : "message",
@@ -823,12 +848,12 @@
 , 			{
 				"box" : 				{
 					"id" : "obj-11",
-					"linecount" : 3,
+					"linecount" : 2,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 838.0, 237.0, 269.0, 47.0 ],
-					"text" : "[Length of note, Carrier Oscillator (MIDI value), modulating oscillator (or ratio), pan value, filter params (TBD)]"
+					"patching_rect" : [ 838.0, 237.0, 269.0, 33.0 ],
+					"text" : "[Length of note in miliseconds, Carrier Oscillator (MIDI value), modulating ratio, pan value]"
 				}
 
 			}
@@ -898,7 +923,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 1243.0, 248.0, 50.0, 22.0 ],
-					"text" : "121"
+					"text" : "30."
 				}
 
 			}
@@ -941,12 +966,13 @@
 , 			{
 				"box" : 				{
 					"id" : "obj-5",
+					"linecount" : 2,
 					"maxclass" : "message",
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 543.25, 248.0, 50.0, 22.0 ],
-					"text" : "0"
+					"patching_rect" : [ 543.25, 248.0, 50.0, 35.0 ],
+					"text" : "\"50 F2 2 0\""
 				}
 
 			}
@@ -1112,7 +1138,16 @@
 			}
 , 			{
 				"patchline" : 				{
+					"destination" : [ "obj-12", 1 ],
+					"order" : 0,
+					"source" : [ "obj-3", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
 					"destination" : [ "obj-60", 1 ],
+					"order" : 1,
 					"source" : [ "obj-3", 0 ]
 				}
 
@@ -1370,7 +1405,7 @@
  ],
 		"dependency_cache" : [ 			{
 				"name" : "FM_synth_from_OSC_message.maxpat",
-				"bootpath" : "/Volumes/lev thumb/final project",
+				"bootpath" : "/Volumes/lev thumb 1/final project/music-from-weather-around-the-world",
 				"patcherrelativepath" : ".",
 				"type" : "JSON",
 				"implicit" : 1
