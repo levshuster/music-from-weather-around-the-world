@@ -10,13 +10,20 @@ from flask import Flask, make_response, request, jsonify, render_template
 from pythonosc import udp_client
 from datetime import datetime, timedelta
 from dataclasses import dataclass
+import socket
 
 app = Flask(__name__)
-ip = "localhost"
-TIMEOUT = 30
+	
+hostname = socket.gethostname()
+ip = socket.gethostbyname(hostname)
+
 musicport = 8000
-players = []
 client = udp_client.SimpleUDPClient(ip, musicport)
+
+
+TIMEOUT = 30
+players = []
+# client = udp_client.SimpleUDPClient(ip, musicport)
 
 # create a named tuple called player with a checking time, BMP, and note values
 
@@ -38,12 +45,19 @@ class Player:
 
 # ---- HELPER FUNCTIONS ----
 
+def get_new_notes():
+	return []
+
 def send_new_BPM():
 	BPM_sum = 0
+	player_not_at_default = 0
 	for player in players:
 		BPM_sum += player.BPM
-		
+		if player.BPM != 0:
+			player_not_at_default += 1
+
 	BPM = BPM_sum / len(players)
+	client.send_message("/tempo", BPM)
 	print(BPM)
 
 def tally_vote():
@@ -75,8 +89,9 @@ def get_user_number():
 			return make_response(str(index))
 	
 	index = len(players)
-	notes = [] # TODO: read notes from file
+	notes = get_new_notes() # TODO: read notes from file
 	players.append(Player(current_timestamp, 0, notes, 0))
+	client.send_message("/user_count", len(players))
 	return make_response(str(index))
 
 @app.route('/vote', methods=["POST"])
@@ -124,9 +139,18 @@ def receiveNote():
 		return jsonify({'success': False})
 	
 	user_number = int(response['user_number'])
-	note_length = int(response['note_length'])
-	panning_value = int(response['panning_value'])
+	note_length = str(response['note_length'])
+	panning_value = str(response['panning_value'])
 	note_number = int(response['note_number'])
+	
+
+	notes = players[user_number].note_values
+	note, ratio = notes[note_number]
+	str1 = " "
+
+	client.send_message("/user_count", str1.join([note_length, note, ratio, panning_value]))
+
+	
 	
 	print(user_number)
 	print(note_length)
@@ -140,4 +164,5 @@ if __name__ == '__main__':
 	parser.add_argument('host', help='the host on which this application is running')
 	parser.add_argument('port', type=int, help='the port on which this application is listening')
 	arguments = parser.parse_args()
-	app.run(host=arguments.host, port=arguments.port, debug=True)
+	print("\n\nConnect to the instrument by being on the same nework on the host computer and going to http://" + ip + ":" + str(arguments.port)+ "\n\n")
+	app.run(host="0.0.0.0", port=arguments.port, debug=True)
