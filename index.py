@@ -16,7 +16,6 @@ import socket
 
 # --- NETWORKING ---
 
-
 app = Flask(__name__)
 	
 hostname = socket.gethostname()
