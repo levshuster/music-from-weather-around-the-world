@@ -14,19 +14,8 @@ from datetime import datetime, timedelta
 from dataclasses import dataclass
 import socket
 
-# --- READ DATA ---
+# --- NETWORKING ---
 
-def read_text_file(file_path) -> list:
-    with open(file_path, 'r') as file:
-        lines = file.readlines()
-        array_2d = [line.strip().split(' ') for line in lines]
-    return array_2d
-
-file_path = 'PentatonicMinorScales.txt'  # Replace with the actual file path
-pent_minor_scales = read_text_file(file_path)
-active_scale = pent_minor_scales[random.randint(0, len(pent_minor_scales)-1)]
-
-# --- FLASK ---
 
 app = Flask(__name__)
 	
@@ -36,28 +25,32 @@ ip = socket.gethostbyname(hostname)
 musicport = 8000
 client = udp_client.SimpleUDPClient(ip, musicport)
 
-
 TIMEOUT = 30
+
+# --- READ DATA ---
+
+def read_text_file(file_path) -> list:
+	with open(file_path, 'r') as file:
+		lines = file.readlines()
+		array_2d = [line.strip().split(' ') for line in lines]
+	return array_2d
+
+file_path = 'PentatonicMinorScales.txt'  # Replace with the actual file path
+pent_minor_scales = read_text_file(file_path)
+active_scale = pent_minor_scales[random.randint(0, len(pent_minor_scales)-1)]
+client.send_message("/active_scale", str(active_scale))
+
+
+# --- STRUCTURES ---
+
 players = []
-# client = udp_client.SimpleUDPClient(ip, musicport)
-
-# create a named tuple called player with a checking time, BMP, and note values
-
 @dataclass
 class Player:
-    check_in_time: datetime
-    BPM: int
-    note_values: list
-    vote: int
+	check_in_time: datetime
+	BPM: int
+	note_values: list
+	vote: int
 
-# def send_message():
-
-# 		client = udp_client.SimpleUDPClient(ip, musicport)
-# 		client.send_message("/temperature", data["temperature_2m_mean"][i])
-# 		client.send_message("/rain", data["rain_sum"][i])
-# 		client.send_message("/snow", data["snowfall_sum"][i])
-# 		client.send_message("/wind", data["windspeed_10m_max"][i])
-# 		client.send_message("/tempo", tempo)
 
 # ---- HELPER FUNCTIONS ----
 
@@ -118,6 +111,8 @@ def tally_vote():
 		while active_scale == old_scale:
 			active_scale = pent_minor_scales[random.randint(0, len(pent_minor_scales)-1)]
 		print("new scale is " + str(active_scale))
+		client.send_message("/active_scale", str(active_scale))
+
 		for player in players:
 			player.notes = get_new_notes()
 	else:
@@ -199,8 +194,8 @@ def receiveNote():
 	notes = players[user_number].note_values
 	note, ratio = notes[note_number]
 	str1 = " "
-
-	client.send_message("/user_count", str1.join([note_length, str(note), str(ratio), panning_value]))
+	print("sending message", str1.join([note_length, str(note), str(ratio), panning_value]))
+	client.send_message("/play_note", str1.join([note_length, str(note), str(ratio), panning_value]))
 
 	
 	
